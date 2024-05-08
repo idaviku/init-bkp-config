@@ -6,6 +6,8 @@ set noerrorbells " desactivar pitido
 set vb t_vb= " desactiva alertas visuales
 set nocompatible
 set showcmd
+set spelllang=es
+set spell!
 set ruler
 set cursorline
 set incsearch
@@ -102,6 +104,8 @@ nnoremap <C-k> 10<C-y>
 " Modificar Texto 
 vnoremap <leader>uu :s/\v<\w/\U&/g<CR>
 
+" corrector ortografico
+nnoremap <leader><leader>sp :setlocal spell!<CR>
 
 " Configuracion de coc falta depurar
 " May need for Vim (not Neovim) since coc.nvim calculates byte offset by count
@@ -182,6 +186,6 @@ endif
 
 let g:user_emmet_install_global = 0
 autocmd FileType html,css EmmetInstall
-
+ 
 autocmd FileType markdown,json setl conceallevel=2
 nnoremap <Leader>kp :let @"=expand("%:p")<CR>
