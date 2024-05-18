@@ -61,6 +61,7 @@ Plug 'lilydjwg/colorizer'
 
 " Autocomplete
 Plug 'SirVer/ultisnips'
+Plug 'honza/vim-snippets'
 Plug 'thomasfaingnaert/vim-lsp-snippets'
 Plug 'thomasfaingnaert/vim-lsp-ultisnips'
 Plug 'prabirshrestha/async.vim'
@@ -233,21 +234,42 @@ function! s:on_lsp_buffer_enabled() abort
     " refer to doc to add more commands
 endfunction
 
+augroup lsp_install
+    au!
+    " call s:on_lsp_buffer_enabled only for languages that has the server registered.
+    autocmd User lsp_buffer_enabled call s:on_lsp_buffer_enabled()
+augroup END
 
-let g:UltiSnipsExpandTrigger="<tab>"
-let g:UltiSnipsJumpForwardTrigger="<tab>"
-let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
+" Personalización del resaltado de diagnósticos
+highlight LspDiagnosticsError cterm=bold ctermfg=white ctermbg=red
+highlight LspDiagnosticsWarning cterm=bold ctermfg=white ctermbg=yellow
 
-if executable('clangd')
-    augroup vim_lsp_cpp
-        autocmd!
-        autocmd User lsp_setup call lsp#register_server({
-                    \ 'name': 'clangd',
-                    \ 'cmd': {server_info->['clangd']},
-                    \ 'whitelist': ['c', 'cpp', 'objc', 'objcpp', 'cc'],
-                    \ })
-	autocmd FileType c,cpp,objc,objcpp,cc setlocal omnifunc=lsp#complete
-    augroup end
-endif
+" configuracion para activar ultisnips
+let g:UltiSnipsEnableSnipMate = 1
 
-set completeopt+=menuone
+"configuracion de asycomplete.vim
+inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
+inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+inoremap <expr> <cr>    pumvisible() ? asyncomplete#close_popup() : "\<cr>"
+
+"let g:UltiSnipsExpandTrigger="<tab>"
+"let g:UltiSnipsJumpForwardTrigger="<tab>"
+"let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
+"
+"if executable('clangd')
+"    augroup vim_lsp_cpp
+"        autocmd!
+"        autocmd User lsp_setup call lsp#register_server({
+"                    \ 'name': 'clangd',
+"                    \ 'cmd': {server_info->['clangd']},
+"                    \ 'whitelist': ['c', 'cpp', 'objc', 'objcpp', 'cc'],
+"                    \ })
+"	autocmd FileType c,cpp,objc,objcpp,cc setlocal omnifunc=lsp#complete
+"    augroup end
+"endif
+"
+"set completeopt+=menuone
+
+
+
+
