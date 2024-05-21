@@ -7,7 +7,6 @@ set vb t_vb= " desactiva alertas visuales
 set nocompatible
 set showcmd
 set spelllang=es
-set spell!
 set ruler
 set cursorline
 set incsearch
@@ -115,6 +114,11 @@ vnoremap <leader>uu :s/\v<\w/\U&/g<CR>
 
 " corrector ortografico
 nnoremap <leader><leader>sp :setlocal spell!<CR>
+" forzar la configuracion de color para el resaltado por conflicto con gruvbox 
+highlight SpellBad ctermfg=White ctermbg=red
+highlight SpellCap ctermfg=LightYellow ctermbg=red
+highlight SpellRare ctermfg=LightBlue ctermbg=red
+highlight SpellLocal ctermfg=LightCyan ctermbg=red
 
 " Configuracion de coc falta depurar
 " May need for Vim (not Neovim) since coc.nvim calculates byte offset by count
@@ -185,7 +189,7 @@ inoreabbrev <expr> __
 
 let g:table_mode_corner_corner='+'
 
-
+" configuracion del copiado entre plataformas wsl
 if system('uname -r') =~ "microsoft"
 	augroup Yank
   autocmd!
@@ -239,8 +243,10 @@ augroup lsp_install
     " call s:on_lsp_buffer_enabled only for languages that has the server registered.
     autocmd User lsp_buffer_enabled call s:on_lsp_buffer_enabled()
 augroup END
-
-" Personalización del resaltado de diagnósticos
+set foldmethod=expr
+  \ foldexpr=lsp#ui#vim#folding#foldexpr()
+  \ foldtext=lsp#ui#vim#folding#foldtext()
+" Personalización del resaltado de diagnósticos 
 highlight LspDiagnosticsError cterm=bold ctermfg=white ctermbg=red
 highlight LspDiagnosticsWarning cterm=bold ctermfg=white ctermbg=yellow
 
@@ -251,25 +257,5 @@ let g:UltiSnipsEnableSnipMate = 1
 inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
 inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 inoremap <expr> <cr>    pumvisible() ? asyncomplete#close_popup() : "\<cr>"
-
-"let g:UltiSnipsExpandTrigger="<tab>"
-"let g:UltiSnipsJumpForwardTrigger="<tab>"
-"let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
-"
-"if executable('clangd')
-"    augroup vim_lsp_cpp
-"        autocmd!
-"        autocmd User lsp_setup call lsp#register_server({
-"                    \ 'name': 'clangd',
-"                    \ 'cmd': {server_info->['clangd']},
-"                    \ 'whitelist': ['c', 'cpp', 'objc', 'objcpp', 'cc'],
-"                    \ })
-"	autocmd FileType c,cpp,objc,objcpp,cc setlocal omnifunc=lsp#complete
-"    augroup end
-"endif
-"
-"set completeopt+=menuone
-
-
 
 
