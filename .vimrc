@@ -99,15 +99,16 @@ nmap <Leader>nt :NERDTreeFind<CR>
 
 
 " Navegacion de ventanas tmux
-nnoremap <silent> <Leader><C-h> :TmuxNavigateLeft<CR>
-nnoremap <silent> <Leader><C-j> :TmuxNavigateDown<CR>
-nnoremap <silent> <Leader><C-k> :TmuxNavigateUp<CR>
-nnoremap <silent> <Leader><C-l> :TmuxNavigateRight<CR>
+let g:tmux_navigator_no_mappings = 1
+nnoremap <silent> <Leader><C-h> :<C-U>TmuxNavigateLeft<CR>
+nnoremap <silent> <Leader><C-j> :<C-U>TmuxNavigateDown<CR>
+nnoremap <silent> <Leader><C-k> :<C-U>TmuxNavigateUp<CR>
+nnoremap <silent> <Leader><C-l> :<C-U>TmuxNavigateRight<CR>
 
 " movimiento rapido de 
 nmap <Leader>s <Plug>(easymotion-s2)
-nnoremap <C-j> 10<C-e>
-nnoremap <C-k> 10<C-y>
+nnoremap <silent> <C-j> 10<C-e><CR>
+nnoremap <silent> <C-k> 10<C-y><CR>
 
 " Modificar Texto 
 vnoremap <leader>uu :s/\v<\w/\U&/g<CR>
@@ -243,9 +244,11 @@ augroup lsp_install
     " call s:on_lsp_buffer_enabled only for languages that has the server registered.
     autocmd User lsp_buffer_enabled call s:on_lsp_buffer_enabled()
 augroup END
-set foldmethod=expr
-  \ foldexpr=lsp#ui#vim#folding#foldexpr()
-  \ foldtext=lsp#ui#vim#folding#foldtext()
+
+" dejar que los server despliegen el autocompletado
+"set foldmethod=expr
+"  \ foldexpr=lsp#ui#vim#folding#foldexpr()
+"  \ foldtext=lsp#ui#vim#folding#foldtext()
 " Personalización del resaltado de diagnósticos 
 highlight LspDiagnosticsError cterm=bold ctermfg=white ctermbg=red
 highlight LspDiagnosticsWarning cterm=bold ctermfg=white ctermbg=yellow
