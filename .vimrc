@@ -1,4 +1,6 @@
+" Habilitar la sintaxis resaltada
 syntax on 
+" configuracion basica
 set number
 set numberwidth=1
 set mouse=a
@@ -32,7 +34,7 @@ set ttyfast " mejora la suavidad cuando hay multiples ventanas
 set nrformats+=alpha
 filetype plugin on 
 
-"--> CONF - CONFIGURACION DE COMPLEMENTOS PLUGINS
+" CONF - CONFIGURACION DE COMPLEMENTOS PLUGINS
 call plug#begin('~/.vim/plugged')
 
 " Temas
@@ -52,6 +54,7 @@ Plug 'yggdroot/indentline'
 Plug 'mattn/emmet-vim'
 Plug 'scrooloose/nerdcommenter'
 Plug 'vimwiki/vimwiki'
+Plug 'rhysd/vim-healthcheck'
 
 " Typing
 Plug 'jiangmiao/auto-pairs'
@@ -60,29 +63,29 @@ Plug 'lilydjwg/colorizer'
 
 " Autocomplete
 Plug 'SirVer/ultisnips'
-Plug 'honza/vim-snippets'
-Plug 'thomasfaingnaert/vim-lsp-snippets'
-Plug 'thomasfaingnaert/vim-lsp-ultisnips'
-Plug 'prabirshrestha/async.vim'
-" Plug 'neoclide/coc.nvim', {'branch':'release'} 
+"Plug 'honza/vim-snippets'
+"Plug 'thomasfaingnaert/vim-lsp-snippets'
+"Plug 'thomasfaingnaert/vim-lsp-ultisnips'
+"Plug 'prabirshrestha/async.vim'
+Plug 'neoclide/coc.nvim', {'branch':'release'} 
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-surround'
 Plug 'dhruvasagar/vim-table-mode'
-Plug 'prabirshrestha/vim-lsp'
-Plug 'mattn/vim-lsp-settings'
-Plug 'prabirshrestha/asyncomplete.vim'
-Plug 'prabirshrestha/asyncomplete-lsp.vim'
-
-Plug 'rhysd/vim-healthcheck'
+"Plug 'prabirshrestha/vim-lsp'
+"Plug 'mattn/vim-lsp-settings'
+"Plug 'prabirshrestha/asyncomplete.vim'
+"Plug 'prabirshrestha/asyncomplete-lsp.vim'
 
 call plug#end()
 
+" Configuracion de tema gruvbox
 colorscheme gruvbox
 let g:gruvbox_contrast_dark = "hard"
+
 let NERDTreeQuitOnOpen=1
 
 
-"--> CONF - MAPEO DE ATAJOS 
+" CONF - MAPEO DE ATAJOS 
 let mapleader=" "
 noremap <Up> <nop>
 noremap <Down> <nop>
@@ -92,30 +95,28 @@ noremap <Right> <nop>
 " Busqueda de cadena con fzf
 map <Leader>p :Files<CR>
 map <Leader>ag :Ag<CR>
-" entrar a modo visual block 
-nnoremap <Leader><Leader>v <C-V>
-
 nmap <Leader>nt :NERDTreeFind<CR>
 
+" Entrar A Modo Visual Block 
+nnoremap <Leader><Leader>v <C-V>
 
-" Navegacion de ventanas tmux
+" Navegacion De Ventanas Tmux
 let g:tmux_navigator_no_mappings = 1
 nnoremap <silent> <Leader><C-h> :<C-U>TmuxNavigateLeft<CR>
 nnoremap <silent> <Leader><C-j> :<C-U>TmuxNavigateDown<CR>
 nnoremap <silent> <Leader><C-k> :<C-U>TmuxNavigateUp<CR>
 nnoremap <silent> <Leader><C-l> :<C-U>TmuxNavigateRight<CR>
 
-" movimiento rapido de 
+" Movimiento Rapido Scroll
 nmap <Leader>s <Plug>(easymotion-s2)
 nnoremap <silent> <C-j> 10<C-e><CR>
 nnoremap <silent> <C-k> 10<C-y><CR>
 
-" Modificar Texto 
+" Modificar Texto Marcado Primara Letra En Mayuscula 
 vnoremap <leader>uu :s/\v<\w/\U&/g<CR>
 
-" corrector ortografico
+" Corrector Ortografico Y Forzar Resaltado De Color
 nnoremap <leader><leader>sp :setlocal spell!<CR>
-" forzar la configuracion de color para el resaltado por conflicto con gruvbox 
 highlight SpellBad ctermfg=White ctermbg=red
 highlight SpellCap ctermfg=LightYellow ctermbg=red
 highlight SpellRare ctermfg=LightBlue ctermbg=red
@@ -135,43 +136,43 @@ set updatetime=300
 
 " Always show the signcolumn, otherwise it would shift the text each time
 " diagnostics appear/become resolved
-"set signcolumn=yes
+set signcolumn=yes
 
 " Use tab for trigger completion with characters ahead and navigate
 " NOTE: There's always complete item selected by default, you may want to enable
 " no select by `"suggest.noselect": true` in your configuration file
 " NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
 " other plugin before putting this into your config
-" inoremap <silent><expr> <TAB>
-"       \ coc#pum#visible() ? coc#pum#next(1) :
-"       \ CheckBackspace() ? "\<Tab>" :
-"       \ coc#refresh()
-" inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
-" 
-" " Make <CR> to accept selected completion item or notify coc.nvim to format
-" " <C-g>u breaks current undo, please make your own choice
-" inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
-"                               \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
-" 
-" " Use <c-space> to trigger completion
-" inoremap <silent><expr> <c-@> coc#refresh()
-" 
-" " Remap <C-f> and <C-b> to scroll float windows/popups
-" if has('nvim-0.4.0') || has('patch-8.2.0750')
-"   nnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
-"   nnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
-"   inoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<Right>"
-"   inoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<Left>"
-"   vnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
-"   vnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
-" endif
-" 
-" 
-" " GoTo code navigation
-" nmap <silent> gd <Plug>(coc-definition)
-" nmap <silent> gy <Plug>(coc-type-definition)
-" nmap <silent> gi <Plug>(coc-implementation)
-" nmap <silent> gr <Plug>(coc-references)
+ inoremap <silent><expr> <TAB>
+       \ coc#pum#visible() ? coc#pum#next(1) :
+       \ CheckBackspace() ? "\<Tab>" :
+       \ coc#refresh()
+ inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
+ 
+ " Make <CR> to accept selected completion item or notify coc.nvim to format
+ " <C-g>u breaks current undo, please make your own choice
+ inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
+                               \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+ 
+ " Use <c-space> to trigger completion
+ inoremap <silent><expr> <c-@> coc#refresh()
+ 
+ " Remap <C-f> and <C-b> to scroll float windows/popups
+ if has('nvim-0.4.0') || has('patch-8.2.0750')
+   nnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
+   nnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
+   inoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<Right>"
+   inoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<Left>"
+   vnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
+   vnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
+ endif
+ 
+ 
+ " GoTo code navigation
+ nmap <silent> gd <Plug>(coc-definition)
+ nmap <silent> gy <Plug>(coc-type-definition)
+ nmap <silent> gi <Plug>(coc-implementation)
+ nmap <silent> gr <Plug>(coc-references)
 
 " configuracion de vim-table-mode
 function! s:isAtStartOfLine(mapping)
@@ -190,7 +191,7 @@ inoreabbrev <expr> __
 
 let g:table_mode_corner_corner='+'
 
-" configuracion del copiado entre plataformas wsl
+" Configuracion Del Copiado Entre Plataformas Wsl
 if system('uname -r') =~ "microsoft"
 	augroup Yank
   autocmd!
@@ -203,62 +204,3 @@ autocmd FileType html,css EmmetInstall
  
 autocmd FileType markdown,json setl conceallevel=2
 nnoremap <Leader>kp :let @"=expand("%:p")<CR>
-
-
-" configuracion para autocompletado de lsp
-"
-if executable('pylsp')
-    " pip install python-lsp-server
-    au User lsp_setup call lsp#register_server({
-        \ 'name': 'pylsp',
-        \ 'cmd': {server_info->['pylsp']},
-        \ 'allowlist': ['python'],
-        \ })
-endif
-
-function! s:on_lsp_buffer_enabled() abort
-    setlocal omnifunc=lsp#complete
-    setlocal signcolumn=yes
-    if exists('+tagfunc') | setlocal tagfunc=lsp#tagfunc | endif
-    nmap <buffer> gd <plug>(lsp-definition)
-    nmap <buffer> gs <plug>(lsp-document-symbol-search)
-    nmap <buffer> gS <plug>(lsp-workspace-symbol-search)
-    nmap <buffer> gr <plug>(lsp-references)
-    nmap <buffer> gi <plug>(lsp-implementation)
-    nmap <buffer> gt <plug>(lsp-type-definition)
-    nmap <buffer> <leader>rn <plug>(lsp-rename)
-    nmap <buffer> [g <plug>(lsp-previous-diagnostic)
-    nmap <buffer> ]g <plug>(lsp-next-diagnostic)
-    nmap <buffer> K <plug>(lsp-hover)
-    nnoremap <buffer> <expr><c-f> lsp#scroll(+4)
-    nnoremap <buffer> <expr><c-d> lsp#scroll(-4)
-
-    let g:lsp_format_sync_timeout = 1000
-    autocmd! BufWritePre *.rs,*.go call execute('LspDocumentFormatSync')
-
-    " refer to doc to add more commands
-endfunction
-
-augroup lsp_install
-    au!
-    " call s:on_lsp_buffer_enabled only for languages that has the server registered.
-    autocmd User lsp_buffer_enabled call s:on_lsp_buffer_enabled()
-augroup END
-
-" dejar que los server despliegen el autocompletado
-"set foldmethod=expr
-"  \ foldexpr=lsp#ui#vim#folding#foldexpr()
-"  \ foldtext=lsp#ui#vim#folding#foldtext()
-" Personalización del resaltado de diagnósticos 
-highlight LspDiagnosticsError cterm=bold ctermfg=white ctermbg=red
-highlight LspDiagnosticsWarning cterm=bold ctermfg=white ctermbg=yellow
-
-" configuracion para activar ultisnips
-let g:UltiSnipsEnableSnipMate = 1
-
-"configuracion de asycomplete.vim
-inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
-inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
-inoremap <expr> <cr>    pumvisible() ? asyncomplete#close_popup() : "\<cr>"
-
-
