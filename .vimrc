@@ -2,6 +2,7 @@
 syntax on 
 " configuracion basica
 set number
+set encoding=utf-8
 set numberwidth=1
 set mouse=a
 set noerrorbells " desactivar pitido 
@@ -124,8 +125,6 @@ highlight SpellLocal ctermfg=LightCyan ctermbg=red
 
 " Configuracion de coc falta depurar
 " May need for Vim (not Neovim) since coc.nvim calculates byte offset by count
-" utf-8 byte sequence
-set encoding=utf-8
 " Some servers have issues with backup files, see #649
 set nobackup
 set nowritebackup
@@ -191,16 +190,31 @@ inoreabbrev <expr> __
 
 let g:table_mode_corner_corner='+'
 
-" Configuracion Del Copiado Entre Plataformas Wsl
-if system('uname -r') =~ "microsoft"
-	augroup Yank
-  autocmd!
-  autocmd TextYankPost * :call system('/mnt/c/windows/system32/clip.exe ',@")
-  augroup END
-endif
-
 let g:user_emmet_install_global = 0
 autocmd FileType html,css EmmetInstall
  
 autocmd FileType markdown,json setl conceallevel=2
 nnoremap <Leader>kp :let @"=expand("%:p")<CR>
+
+" Configuración Del Copiado y pegado Entre Plataformas Wsl
+if has('clipboard') && has('unnamedplus')
+    " Habilitar el soporte del portapapeles y usar el registro "+ para copiar " y pegar
+  set clipboard=unnamedplus
+endif
+
+"if system('uname -r') =~ "microsoft"
+"    " Configurar autocmds para copiar y pegar texto entre Vim en WSL y
+"    " Windows
+"  augroup WSLClipboard
+"  autocmd!
+"  autocmd TextYankPost * if v:event.operator is# 'y' | call system('/mnt/c/Windows/System32/clip.exe', @0) | endif 
+"  autocmd VimLeave * call system('cat /dev/null > /dev/clipboard')
+"  augroup END
+"endif
+
+if system('uname -r') =~ "microsoft"
+	augroup Yank
+  autocmd!
+  autocmd TextYankPost * :call system('clip.exe',@")
+  augroup END
+endif
