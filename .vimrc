@@ -33,6 +33,7 @@ set splitbelow splitright   " Set the splits to open at the right side and below
 set lazyredraw " no renderiza cuando la opcion se ejecuto antes 
 set ttyfast " mejora la suavidad cuando hay multiples ventanas
 set nrformats+=alpha  " sets foreground color (ANSI, true-color mode)
+set backspace=indent,eol,start
 let &t_8f = "\e[38;2;%lu;%lu;%lum"
 " sets background color (ANSI, true-color mode)
 let &t_8b = "\e[48;2;%lu;%lu;%lum"
@@ -222,3 +223,9 @@ if system('uname -r') =~ "microsoft"
   autocmd TextYankPost * :call system('clip.exe',@")
   augroup END
 endif
+
+
+"command! LiveServer silent !live-server %:p:h &
+
+
+command! BrowserSync silent !browser-sync start --server %:p:h --files %:p:h &
