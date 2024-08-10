@@ -3,6 +3,9 @@
 
 # Path to your oh-my-zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
+export VIMRC=~/.vimrc
+export VISUAL=vim
+export EDITOR=vim
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
@@ -70,7 +73,14 @@ ZSH_THEME="xiong-chiamiov-plus"
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git z)
+plugins=(
+  git
+  z
+  fzf
+  zsh-syntax-highlighting
+  zsh-autosuggestions
+  zsh-history-substring-search  
+)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -100,6 +110,37 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
+source ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+source ~/.oh-my-zsh/custom/plugins/zsh-history-substring-search/zsh-history-substring-search.zsh
+source ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+source ~/.oh-my-zsh/custom/plugins/fzf-tab/fzf-tab.zsh
+
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+autoload -Uz compinit &&  compinit
+
+# Estilos
+# Habilita el autocompletado de comandos y opciones
+#zstyle ':completion:*' completer _expand _complete _correct
+zstyle ':completion:*' menu no
+#zstyle ':fzf-tab:complete:cd:*' fzf-preview 'ls --color $realpath'
+
+
+#Aliases
+alias ls='ls --color'
+
+# configuracion para history
+bindkey '^[[A' history-substring-search-up
+bindkey '^[[B' history-substring-search-down
+
+HISTDUP=erase
+setopt appendhistory
+setopt sharehistory
+setopt hist_ignore_space
+setopt hist_ignore_all_dups
+setopt hist_save_no_dups
+setopt hist_ignore_all_dups
+setopt hist_find_no_dups
+
