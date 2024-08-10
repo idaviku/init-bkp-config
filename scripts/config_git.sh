@@ -24,6 +24,7 @@ if [[ "$modify_config" == "yes" ]]; then
     git config --global core.editor "$git_editor"
     git config --global color.ui auto
     git config --global push.default simple
+    git config --global init.defaultbranch=main
 
     echo "Nueva configuración de Git:"
     show_git_config
