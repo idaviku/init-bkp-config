@@ -1,11 +1,1 @@
-<<<<<<< HEAD
-*
-!.gitignore
-!.vimrc
-!.zshrc
-!.tmux.conf
-!imgcore.webp
-!config_git.sh
-!retrobox.vim
-=======
->>>>>>> b39cf29 (change file to ignore from gitignore)
+run-init-config.sh
