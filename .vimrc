@@ -38,13 +38,14 @@ let &t_8f = "\e[38;2;%lu;%lu;%lum"
 " sets background color (ANSI, true-color mode)
 let &t_8b = "\e[48;2;%lu;%lu;%lum"
 set termguicolors
+colorscheme retrobox
 filetype plugin on 
 
 " CONF - CONFIGURACION DE COMPLEMENTOS PLUGINS
 call plug#begin('~/.vim/plugged')
 
 " Temas
-Plug 'morhetz/gruvbox'
+"Plug 'morhetz/gruvbox'
 Plug 'maximbaz/lightline-ale'
 Plug 'itchyny/lightline.vim'
 
@@ -85,8 +86,8 @@ Plug 'dhruvasagar/vim-table-mode'
 call plug#end()
 
 " Configuracion de tema gruvbox
-colorscheme gruvbox
-let g:gruvbox_contrast_dark = "hard"
+"colorscheme gruvbox
+"let g:gruvbox_contrast_dark = "hard"
 
 let NERDTreeQuitOnOpen=1
 
@@ -158,8 +159,13 @@ set signcolumn=yes
  inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
                                \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
  
- " Use <c-space> to trigger completion
- inoremap <silent><expr> <c-@> coc#refresh()
+function! CheckBackspace() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
+" Use <c-space> to trigger completion
+inoremap <silent><expr> <c-@> coc#refresh()
  
  " Remap <C-f> and <C-b> to scroll float windows/popups
  if has('nvim-0.4.0') || has('patch-8.2.0750')
@@ -171,21 +177,31 @@ set signcolumn=yes
    vnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
  endif
  
- 
  " GoTo code navigation
  nmap <silent> gd <Plug>(coc-definition)
  nmap <silent> gy <Plug>(coc-type-definition)
  nmap <silent> gi <Plug>(coc-implementation)
  nmap <silent> gr <Plug>(coc-references)
 
+" Use K to show documentation in preview window
+nnoremap <silent> K :call ShowDocumentation()<CR>
+
+function! ShowDocumentation()
+  if CocAction('hasProvider', 'hover')
+    call CocActionAsync('doHover')
+  else
+    call feedkeys('K', 'in')
+  endif
+endfunction
+
+" Run the Code Lens action on the current line
+nmap <leader>cl  <Plug>(coc-codelens-action)
+
 " configuracion de vim-table-mode
 function! s:isAtStartOfLine(mapping)
   let text_before_cursor = getline('.')[0 : col('.')-1]
-  let mapping_pattern = '\V' . escape(a:mapping, '\')
-  let comment_pattern = '\V' . escape(substitute(&l:commentstring, '%s.*$', '', ''), '\')
-  return (text_before_cursor =~? '^' . ('\v(' . comment_pattern . '\v)?') . '\s*\v' . mapping_pattern . '\v$')
+  let mapping_pattern = '\V' . escape(a:mapping, '\') let comment_pattern = '\V' . escape(substitute(&l:commentstring, '%s.*$', '', ''), '\') return (text_before_cursor =~? '^' . ('\v(' . comment_pattern . '\v)?') . '\s*\v' . mapping_pattern . '\v$') 
 endfunction
-
 inoreabbrev <expr> <bar><bar>
           \ <SID>isAtStartOfLine('\|\|') ?
           \ '<c-o>:TableModeEnable<cr><bar><space><bar><left><left>' : '<bar><bar>'
@@ -226,6 +242,5 @@ endif
 
 
 "command! LiveServer silent !live-server %:p:h &
-
 
 command! BrowserSync silent !browser-sync start --server %:p:h --files %:p:h &
