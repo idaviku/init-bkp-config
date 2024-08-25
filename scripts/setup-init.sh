@@ -8,6 +8,16 @@ NCOLOR="\033[0m"
 package_manager=("apt" "pacman" "yum" "dnf" "zypper" "apk")
 main_package=("zsh" "tmux" "curl" "git" "gcc" "bash" "gawk" "sed" "python" "python-pip" "make" "cmake" "net-tools" "nmap" "man-db" "docker" "docker-compose")
 extra_programs=("vim" "javac" "mysql" "sqlite3" "psql" "redis-cli" "kubectl" "tcpdump" "ansible" "chef" "puppet" "fail2ban" "rst2man")
+OH_MY_ZSH_DIR="$HOME/.oh-my-zsh"
+ZSH_CUSTOM_PLUGINS_DIR="$OH_MY_ZSH_DIR/custom/plugins"
+plugins=(
+  "git"
+  "z"
+  "fzf"
+  "zsh-syntax-highlighting"
+  "zsh-autosuggestions"
+  "zsh-history-substring-search"  
+)
 
 my_package_manager=""
 not_installed=()
@@ -181,6 +191,38 @@ install_fail2ban_repo(){
   sudo python setup.py install 
   fail2ban-client version
 }
+install_plugins_zsh(){
+  if [ ! -d "$OH_MY_ZSH_DIR" ]; then
+      echo "Oh My Zsh no está instalado. Instalando Oh My Zsh..."
+      sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+  else
+      echo "Oh My Zsh ya está instalado."
+  fi
+
+  if [ ! -d "$ZSH_CUSTOM_PLUGINS_DIR" ]; then
+      echo "Creando directorio para plugins personalizados..."
+      mkdir -p "$ZSH_CUSTOM_PLUGINS_DIR"
+  fi
+  for plugin in "${plugins[@]}"; do
+      plugin_dir="$ZSH_CUSTOM_PLUGINS_DIR/$plugin"
+      if [ ! -d "$plugin_dir" ]; then
+          echo "Instalando plugin $plugin..."
+          git clone "https://github.com/zsh-users/$plugin" "$plugin_dir"
+      else
+          echo "El plugin $plugin ya está instalado."
+      fi
+  done
+  ZSHRC="$HOME/.zshrc"
+  if grep -q "plugins=(" "$ZSHRC"; then
+      echo "Actualizando configuración de plugins en .zshrc..."
+      sed -i "/^plugins=(/c\plugins=("${plugins[@]}")" "$ZSHRC"
+  else
+      echo "Añadiendo configuración de plugins a .zshrc..."
+      echo "plugins=("${plugins[@]}")" >> "$ZSHRC"
+  fi
+  echo "La instalación y configuración de plugins de Zsh se ha completado. Reinicia tu terminal o ejecuta 'source ~/.zshrc' para aplicar los cambios."
+  source ~/.zshrc
+}
 install_extra_package(){
   for pck in "${extra_programs[@]}"; do
     if ! command -v $pck &>/dev/null ;then
@@ -201,4 +243,5 @@ check_packagev2
 install_with_package
 echo "Paquetes extras:${#extra_programs[@]}"
 install_extra_package
+install_plugins_zsh
 echo "Configuración e instalación inicial completada."
