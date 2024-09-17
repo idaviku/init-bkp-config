@@ -58,7 +58,7 @@ Plug 'junegunn/fzf'
 Plug 'junegunn/fzf.vim'
 Plug 'mhinz/vim-signify', {'tag':'legacy'}
 Plug 'yggdroot/indentline'
-Plug 'mattn/emmet-vim'
+Plug 'mattn/emmet-vim' " <c-y>,
 Plug 'scrooloose/nerdcommenter'
 Plug 'vimwiki/vimwiki'
 Plug 'rhysd/vim-healthcheck'
@@ -82,6 +82,9 @@ Plug 'dhruvasagar/vim-table-mode'
 "Plug 'mattn/vim-lsp-settings'
 "Plug 'prabirshrestha/asyncomplete.vim'
 "Plug 'prabirshrestha/asyncomplete-lsp.vim'
+Plug 'tpope/vim-dadbod'
+Plug 'kristijanhusak/vim-dadbod-ui' " :DBUI
+Plug 'kristijanhusak/vim-dadbod-completion' 
 
 call plug#end()
 
@@ -243,4 +246,4 @@ endif
 
 "command! LiveServer silent !live-server %:p:h &
 
-command! BrowserSync silent !browser-sync start --server %:p:h --files %:p:h &
+command! BrowserSync silent !browser-sync start --server %:p:h --files %:p:h --browser "google-chrome-stable"&
