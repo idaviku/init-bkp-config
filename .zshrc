@@ -131,6 +131,10 @@ zstyle ':completion:*' menu no
 #Aliases
 alias ls='ls --color'
 
+#Funciones
+checklink() { curl -s -I -L "$1" | grep -i "link:"; }
+
+
 # configuracion para history
 bindkey '^[[A' history-substring-search-up
 bindkey '^[[B' history-substring-search-down
@@ -143,4 +147,3 @@ setopt hist_ignore_all_dups
 setopt hist_save_no_dups
 setopt hist_ignore_all_dups
 setopt hist_find_no_dups
-
