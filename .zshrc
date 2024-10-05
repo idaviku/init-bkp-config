@@ -132,7 +132,7 @@ zstyle ':completion:*' menu no
 alias ls='ls --color'
 
 #Funciones
-checklink() { curl -s -I -L "$1" | grep -i "link:"; }
+checklink() { curl -s -I -L "$1" | grep -i "link:\|location:"; }
 
 
 # configuracion para history
