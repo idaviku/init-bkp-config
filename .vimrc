@@ -243,6 +243,14 @@ if system('uname -r') =~ "microsoft"
   augroup END
 endif
 
+" Configuracion De Vimwiki
+let wik_doc={'path':'~/wiki/doc/wik-doc','syntax':'default','ext':'md'}
+let wik_life={'path':'~/wiki/life/wik-life','syntax':'default','ext':'md'}
+let wik_work={'path':'~/wiki/work/wik-work','syntax':'default','ext':'md'}
+
+let g:vimwiki_list=[wik_doc,wik_life,wik_work]
+
+nnoremap <leader>dt i<C-r>=strftime('%d/%m/%Y %A')<CR><Esc>
 
 "command! LiveServer silent !live-server %:p:h &
 
