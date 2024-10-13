@@ -7,6 +7,7 @@ export VIMRC=~/.vimrc
 export VISUAL=vim
 export EDITOR=vim
 
+xset b off
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
@@ -133,7 +134,7 @@ alias ls='ls --color'
 
 #Funciones
 checklink() { curl -s -I -L "$1" | grep -i "link:\|location:"; }
-
+wifixhexa() {echo "$1" | xxd -r -p}
 
 # configuracion para history
 bindkey '^[[A' history-substring-search-up
