@@ -193,35 +193,52 @@ install_fail2ban_repo(){
 }
 install_plugins_zsh(){
   if [ ! -d "$OH_MY_ZSH_DIR" ]; then
-      echo "Oh My Zsh no está instalado. Instalando Oh My Zsh..."
-      sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+    echo "Oh My Zsh no está instalado. Instalando Oh My Zsh..."
+    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
   else
-      echo "Oh My Zsh ya está instalado."
+    echo "Oh My Zsh ya está instalado."
   fi
 
   if [ ! -d "$ZSH_CUSTOM_PLUGINS_DIR" ]; then
-      echo "Creando directorio para plugins personalizados..."
-      mkdir -p "$ZSH_CUSTOM_PLUGINS_DIR"
+    echo "Creando directorio para plugins personalizados..."
+    mkdir -p "$ZSH_CUSTOM_PLUGINS_DIR"
   fi
   for plugin in "${plugins[@]}"; do
-      plugin_dir="$ZSH_CUSTOM_PLUGINS_DIR/$plugin"
-      if [ ! -d "$plugin_dir" ]; then
-          echo "Instalando plugin $plugin..."
-          git clone "https://github.com/zsh-users/$plugin" "$plugin_dir"
-      else
-          echo "El plugin $plugin ya está instalado."
-      fi
+    plugin_dir="$ZSH_CUSTOM_PLUGINS_DIR/$plugins"
+    native_plugin_dir="$OH_MY_ZSH_DIR/plugins/$plugins"
+    if [[ ! -d "$plugin_dir" && ! -d "$native_plugin_dir" ]]; then
+      echo "Instalando plugin $plugin..."
+      git clone "https://github.com/zsh-users/$plugin" "$plugin_dir"
+    else
+      echo "El plugin $plugin ya está instalado."
+    fi
   done
   ZSHRC="$HOME/.zshrc"
-  if grep -q "plugins=(" "$ZSHRC"; then
-      echo "Actualizando configuración de plugins en .zshrc..."
-      sed -i "/^plugins=(/c\plugins=("${plugins[@]}")" "$ZSHRC"
+  if grep -q "^plugins=(" "$ZSHRC"; then
+    echo "Actualizando configuración de plugins en .zshrc..."
+    # Elimina la línea existente de plugins
+    new_plugins="plugins=(\n"
+    for plugin in "${plugins[@]}"; do
+      new_plugins+="  $plugin\n"  
+    done
+    new_plugins+=")\n"
+    awk -v new_plugins="$new_plugins" '
+      BEGIN { in_plugins = 0 }
+      /^plugins=\(/ { in_plugins = 1; print new_plugins; next }
+      in_plugins && /^\s*\)/ { in_plugins = 0; next }
+      !in_plugins { print }
+    ' "$ZSHRC" > tmp_file && mv tmp_file "$ZSHRC"
   else
-      echo "Añadiendo configuración de plugins a .zshrc..."
-      echo "plugins=("${plugins[@]}")" >> "$ZSHRC"
+    echo "Añadiendo configuración de plugins a .zshrc..."
+    echo "plugins=(" >> "$ZSHRC"
+    for plugin in "${plugins[@]}"; do
+      echo "  $plugin" >> "$ZSHRC"
+    done
+    echo ")" >> "$ZSHRC"
   fi
+
   echo "La instalación y configuración de plugins de Zsh se ha completado. Reinicia tu terminal o ejecuta 'source ~/.zshrc' para aplicar los cambios."
-  source ~/.zshrc
+  #source ~/.zshrc
 }
 install_extra_package(){
   for pck in "${extra_programs[@]}"; do
@@ -243,5 +260,5 @@ check_packagev2
 install_with_package
 echo "Paquetes extras:${#extra_programs[@]}"
 install_extra_package
-#install_plugins_zsh
+install_plugins_zsh
 echo "Configuración e instalación inicial completada."
