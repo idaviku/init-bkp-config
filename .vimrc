@@ -260,3 +260,21 @@ nnoremap <leader>vr :vsplit $VIMRC<CR>
 "command! LiveServer silent !live-server %:p:h &
 
 command! BrowserSync silent !browser-sync start --server %:p:h --files %:p:h --browser "google-chrome-stable"&
+
+function! RunFile()
+  let l:filetype = expand('%:e')  " Obtener la extensión del archivo
+  execute 'w'  " Guardar el archivo
+  if l:filetype == 'py'
+    execute '!python3 %'
+  elseif l:filetype == 'js'
+    execute '!node %'
+  elseif l:filetype == 'cpp'
+    execute '!g++ % -o %< && ./%<'
+  elseif l:filetype == 'sh'
+    execute '!bash %'
+  else
+    echo "No hay soporte para este tipo de archivo."
+  endif
+endfunction
+
+nnoremap <F5> :call RunFile()<CR>
