@@ -59,8 +59,8 @@ Plug 'junegunn/fzf.vim'
 Plug 'mhinz/vim-signify', {'tag':'legacy'}
 Plug 'yggdroot/indentline'
 Plug 'mattn/emmet-vim' " <c-y>,
-Plug 'scrooloose/nerdcommenter'
-Plug 'vimwiki/vimwiki'
+Plug 'scrooloose/nerdcommenter' " <leader>c<space>
+Plug 'vimwiki/vimwiki' " :VimWikiUISelect
 Plug 'rhysd/vim-healthcheck'
 
 " Typing
@@ -69,16 +69,16 @@ Plug 'alvan/vim-closetag'
 Plug 'lilydjwg/colorizer'
 
 " Autocomplete
-Plug 'SirVer/ultisnips'
-"Plug 'honza/vim-snippets'
+Plug 'SirVer/ultisnips' " :UltiSnipsEdit
+Plug 'honza/vim-snippets'
 "Plug 'thomasfaingnaert/vim-lsp-snippets'
 "Plug 'thomasfaingnaert/vim-lsp-ultisnips'
 "Plug 'prabirshrestha/async.vim'
 Plug 'neoclide/coc.nvim', {'branch':'release'} 
 Plug 'tpope/vim-repeat'
-Plug 'tpope/vim-surround'
-Plug 'dhruvasagar/vim-table-mode'
-"Plug 'prabirshrestha/vim-lsp'
+Plug 'tpope/vim-surround' " cs<caracter> ds<char> ysiw<char>
+Plug 'dhruvasagar/vim-table-mode' " <leader>tm
+"Plug 'prabirshrestha/ vim-lsp'
 "Plug 'mattn/vim-lsp-settings'
 "Plug 'prabirshrestha/asyncomplete.vim'
 "Plug 'prabirshrestha/asyncomplete-lsp.vim'
@@ -236,6 +236,11 @@ endif
 "  augroup END
 "endif
 
+"Configuracion UltiSnips
+let g:UltiSnipsExpandTrigger="<tab>"
+let g:UltiSnipsJumpForwardTrigger="<c-b>"
+let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+
 if system('uname -r') =~ "microsoft"
 	augroup Yank
   autocmd!
@@ -251,7 +256,7 @@ let wik_work={'path':'~/wiki/work/wik-work','syntax':'default','ext':'md'}
 let g:vimwiki_list=[wik_doc,wik_life,wik_work]
 
 nnoremap <leader>dt i<C-r>=strftime('%d/%m/%Y %A')<CR><Esc>
-
+nnoremap <leader>vr :vsplit $VIMRC<CR>
 "command! LiveServer silent !live-server %:p:h &
 
 command! BrowserSync silent !browser-sync start --server %:p:h --files %:p:h --browser "google-chrome-stable"&
