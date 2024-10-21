@@ -137,6 +137,13 @@ alias ls='ls --color'
 #Funciones
 checklink() { curl -s -I -L "$1" | grep -i "link:\|location:"; }
 wifixhexa() {echo "$1" | xxd -r -p}
+deletespaces() {
+  for item in "$1"*\ *; do
+    if [ -e "$item" ]; then
+      mv "$item" "${item// /-}"
+    fi
+  done
+}
 
 # configuracion para history
 bindkey '^[[A' history-substring-search-up
