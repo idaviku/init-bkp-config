@@ -321,3 +321,23 @@ function! FragmentLines(max_length)
 endfunction
 
 nnoremap <leader>f :call FragmentLines(60)<CR>
+
+function! HighlightDuplicates()
+    let l:lines = getline(1, '$')
+    let l:counts = {}
+    for l:line in l:lines
+        let l:counts[l:line] = get(l:counts, l:line, 0) + 1
+    endfor
+    
+    for [l:line, l:count] in items(l:counts)
+        if l:count > 1
+            " Resaltar la línea
+            execute 'syntax match Duplicates "' . l:line . '"'
+        endif
+    endfor
+    
+    highlight Duplicates ctermfg=darkred ctermbg=white cterm=bold
+endfunction
+
+nnoremap <leader>rp :call HighlightDuplicates()<CR>
+
