@@ -76,7 +76,7 @@ Plug 'honza/vim-snippets'
 "Plug 'prabirshrestha/async.vim'
 Plug 'neoclide/coc.nvim', {'branch':'release'} 
 Plug 'tpope/vim-repeat'
-Plug 'tpope/vim-surround' " cs<caracter> ds<char> ysiw<char>
+Plug 'tpope/vim-surround' " cs<caracter> ds<char> ysiw<char> , mode(v) S
 Plug 'dhruvasagar/vim-table-mode' " <leader>tm
 "Plug 'prabirshrestha/ vim-lsp'
 "Plug 'mattn/vim-lsp-settings'
@@ -278,3 +278,46 @@ function! RunFile()
 endfunction
 
 nnoremap <F5> :call RunFile()<CR>
+
+function! FragmentLines(max_length)
+    let l:current_line = getline('.')
+    let l:line_length = len(l:current_line)
+
+    if l:line_length <= a:max_length
+        return
+    endif
+
+    let l:fragments = []
+    let l:words = split(l:current_line, '\s\+')
+    let l:fragment = ''
+
+    for l:word in l:words
+        if len(l:fragment) + len(l:word) + 1 <= a:max_length
+            if l:fragment == ''
+                let l:fragment = l:word
+            else
+                let l:fragment .= ' ' . l:word
+            endif
+        else
+            " Si la palabra es más larga que max_length, agrega la palabra como una nueva línea
+            if len(l:word) > a:max_length
+                if l:fragment != ''
+                    call add(l:fragments, l:fragment)
+                endif
+                call add(l:fragments, l:word)
+                let l:fragment = ''
+            else
+                call add(l:fragments, l:fragment)
+                let l:fragment = l:word
+            endif
+        endif
+    endfor
+
+    if l:fragment != ''
+        call add(l:fragments, l:fragment)
+    endif
+
+    call setline('.', l:fragments)
+endfunction
+
+nnoremap <leader>f :call FragmentLines(60)<CR>
