@@ -280,64 +280,111 @@ endfunction
 nnoremap <F5> :call RunFile()<CR>
 
 function! FragmentLines(max_length)
-    let l:current_line = getline('.')
-    let l:line_length = len(l:current_line)
+  let l:current_line = getline('.')
+  let l:line_length = len(l:current_line)
 
-    if l:line_length <= a:max_length
-        return
-    endif
+  if l:line_length <= a:max_length
+    return
+  endif
 
-    let l:fragments = []
-    let l:words = split(l:current_line, '\s\+')
-    let l:fragment = ''
+  let l:fragments = []
+  let l:words = split(l:current_line, '\s\+')
+  let l:fragment = ''
 
-    for l:word in l:words
-        if len(l:fragment) + len(l:word) + 1 <= a:max_length
-            if l:fragment == ''
-                let l:fragment = l:word
-            else
-                let l:fragment .= ' ' . l:word
-            endif
-        else
-            " Si la palabra es más larga que max_length, agrega la palabra como una nueva línea
-            if len(l:word) > a:max_length
-                if l:fragment != ''
-                    call add(l:fragments, l:fragment)
-                endif
-                call add(l:fragments, l:word)
-                let l:fragment = ''
-            else
-                call add(l:fragments, l:fragment)
-                let l:fragment = l:word
-            endif
+  for l:word in l:words
+    if len(l:fragment) + len(l:word) + 1 <= a:max_length
+      if l:fragment == ''
+        let l:fragment = l:word
+      else
+        let l:fragment .= ' ' . l:word
+      endif
+    else
+      " Si la palabra es más larga que max_length, agrega la palabra como una nueva línea
+      if len(l:word) > a:max_length
+        if l:fragment != ''
+          call add(l:fragments, l:fragment)
         endif
-    endfor
-
-    if l:fragment != ''
+        call add(l:fragments, l:word)
+        let l:fragment = ''
+      else
         call add(l:fragments, l:fragment)
+        let l:fragment = l:word
+      endif
     endif
+  endfor
 
-    call setline('.', l:fragments)
+  if l:fragment != ''
+    call add(l:fragments, l:fragment)
+  endif
+
+  call setline('.', l:fragments)
 endfunction
 
 nnoremap <leader>f :call FragmentLines(60)<CR>
 
 function! HighlightDuplicates()
-    let l:lines = getline(1, '$')
-    let l:counts = {}
-    for l:line in l:lines
-        let l:counts[l:line] = get(l:counts, l:line, 0) + 1
-    endfor
-    
-    for [l:line, l:count] in items(l:counts)
-        if l:count > 1
-            " Resaltar la línea
-            execute 'syntax match Duplicates "' . l:line . '"'
-        endif
-    endfor
-    
-    highlight Duplicates ctermfg=darkred ctermbg=white cterm=bold
+  let l:lines = getline(1, '$')
+  let l:counts = {}
+  for l:line in l:lines
+    let l:counts[l:line] = get(l:counts, l:line, 0) + 1
+  endfor
+
+  for [l:line, l:count] in items(l:counts)
+    if l:count > 1
+      " Resaltar la línea
+      execute 'syntax match Duplicates "' . l:line . '"'
+    endif
+  endfor
+  highlight Duplicates ctermfg=darkred ctermbg=white cterm=bold
 endfunction
 
 nnoremap <leader>rp :call HighlightDuplicates()<CR>
 
+function! RemoveDuplicates()
+  let l:lines = getline(1, '$')
+  let l:unique_lines = []
+  let l:seen = {}
+  for l:line in l:lines
+    if !has_key(l:seen, l:line)
+      call add(l:unique_lines, l:line)
+      let l:seen[l:line] = 1
+    endif
+  endfor
+
+  "let l:delete_all = input("¿Borrar todos los duplicados? (s/n): ")
+
+  "if l:delete_all == 's'
+    call setline(1, l:unique_lines)
+    let l:remaining_lines = len(l:unique_lines)
+    execute (l:remaining_lines + 1) . ",$d"
+  "else
+    "" Preguntar sobre cada línea duplicada
+    "for l:line in keys(l:seen)
+      "if l:seen[l:line] > 1
+        "let l:confirm = input("¿Borrar todas las instancias de la línea duplicada: '" . l:line . "'? (s/n): ")
+        "if l:confirm == 's'
+          "" Borrar todas las instancias menos la primera
+          "execute 'g/' . escape(l:line, '/') . '/d'
+          "let l:seen[l:line] = 1  " Marcar como ya añadida
+        "endif
+      "endif
+    "endfor
+
+    "" Actualizar la lista de líneas a mantener
+    "let l:lines_to_keep = []
+    "for l:line in l:unique_lines
+      "if has_key(l:seen, l:line)
+        "call add(l:lines_to_keep, l:line)
+      "endif
+    "endfor
+
+    "" Actualizar las líneas en el buffer
+    "call setline(1, l:lines_to_keep)
+    "let l:remaining_lines = len(l:lines_to_keep)
+    "execute (l:remaining_lines + 1) . ",$d"  " Eliminar líneas restantes
+  "endif 
+
+  redraw!
+endfunction
+
+nnoremap <leader>rpd :call RemoveDuplicates()<CR>
