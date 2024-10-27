@@ -10,7 +10,7 @@
 # -----------------------------------------------------------------------------
 
 
-files=("$HOME/.archivo1.conf" "$HOME/.archivo2.conf" "$HOME/.archivo3.conf")
+files=("$HOME/.vimrc" "$HOME/.zshrc" "$HOME/.tmux.conf")
 backup_dir="$HOME/"
 
 for file in "${files[@]}"; do
