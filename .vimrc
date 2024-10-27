@@ -220,6 +220,12 @@ autocmd FileType html,css EmmetInstall
 autocmd FileType markdown,json setl conceallevel=2
 nnoremap <Leader>kp :let @"=expand("%:p")<CR>
 
+augroup AutobkpDummies
+  autocmd!
+  autocmd BufWritePre ~/.vimrc,~/.zshrc,~/.tmux.conf :!~/rootx56/config/init-bkp-config/scripts/bkp4dummies.sh %
+augroup END
+
+
 " Configuración Del Copiado y pegado Entre Plataformas Wsl
 if has('clipboard') && has('unnamedplus')
     " Habilitar el soporte del portapapeles y usar el registro "+ para copiar " y pegar
