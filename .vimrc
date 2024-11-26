@@ -39,6 +39,9 @@ let &t_8f = "\e[38;2;%lu;%lu;%lum"
 let &t_8b = "\e[48;2;%lu;%lu;%lum"
 set termguicolors
 colorscheme retrobox
+set linebreak  "evita que las palabras se corten por wrap 
+set showbreak=-> "caracter visual para indicar que la linea se corto
+set breakindent "indentacion en lineas cortadas
 filetype plugin on 
 
 " CONF - CONFIGURACION DE COMPLEMENTOS PLUGINS
