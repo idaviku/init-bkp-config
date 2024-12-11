@@ -258,8 +258,8 @@ if system('uname -r') =~ "microsoft"
 endif
 
 " Configuracion De Vimwiki
-let wik_doc={'path':'~/wiki/doc/wik-doc','syntax':'default','ext':'md'}
-let wik_life={'path':'~/wiki/life/wik-life','syntax':'default','ext':'md'}
+let wik_doc={'path':'~/rootx56/wiki/wik-doc','syntax':'default','ext':'md','links_space_char':'_'}
+let wik_life={'path':'~/rootx56/4life','syntax':'default','ext':'md','links_space_char':'_'}
 let wik_work={'path':'~/wiki/work/wik-work','syntax':'default','ext':'md'}
 
 let g:vimwiki_list=[wik_doc,wik_life,wik_work]
@@ -397,3 +397,15 @@ function! RemoveDuplicates()
 endfunction
 
 nnoremap <leader>rpd :call RemoveDuplicates()<CR>
+
+function! SortArray()
+  " Itera sobre cada línea en el rango actual
+  for l:line in getline("'<", "'>")
+    " Divide la línea en palabras, las ordena y las une
+    let l:sorted_line = join(sort(split(l:line, '\s\+')), ' ')
+    " Sustituye la línea original con la línea ordenada
+    call setline('.', l:sorted_line)
+  endfor
+endfunction
+
+vnoremap <leader>sa :call SortArray()<CR>
