@@ -68,7 +68,6 @@ ZSH_THEME="xiong-chiamiov-plus"
 
 # Would you like to use another custom folder than $ZSH/custom?
 # ZSH_CUSTOM=/path/to/new-custom-folder
-
 # Which plugins would you like to load?
 # Standard plugins can be found in $ZSH/plugins/
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
@@ -86,6 +85,7 @@ plugins=(
 
 
 source $ZSH/oh-my-zsh.sh
+source $HOME/.local/share/.silntK.bak
 
 # User configuration
 
@@ -144,6 +144,8 @@ deletespaces() {
     fi
   done
 }
+
+function diskUsage() { find ./ -type f -size "$1" -exec du -ah {} + }
 
 # configuracion para history
 bindkey '^[[A' history-substring-search-up
