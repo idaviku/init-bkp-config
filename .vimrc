@@ -125,6 +125,11 @@ nmap <Leader>s <Plug>(easymotion-s2)
 nnoremap <silent> <C-j> 10<C-e><CR>
 nnoremap <silent> <C-k> 10<C-y><CR>
 
+" Use uppercase target labels and type as a lower case
+let g:EasyMotion_use_upper = 1
+ " type `l` and match `l`&`L`
+let g:EasyMotion_smartcase = 1
+
 " Modificar Texto Marcado Primara Letra En Mayuscula 
 vnoremap <leader>uu :s/\v<\w/\U&/g<CR>
 
