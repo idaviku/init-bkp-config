@@ -139,6 +139,18 @@ highlight SpellBad ctermfg=White ctermbg=red
 highlight SpellCap ctermfg=LightYellow ctermbg=red
 highlight SpellRare ctermfg=LightBlue ctermbg=red
 highlight SpellLocal ctermfg=LightCyan ctermbg=red
+highlight resaltado ctermfg=yellow ctermbg=red guifg=yellow guibg=red
+highlight resaltado1 ctermfg=black ctermbg=cyan guifg=black guibg=cyan
+highlight resaltado2 ctermfg=black ctermbg=green guifg=black guibg=green
+
+function! HighlightSelection(style)
+    let l:selection = escape(@", '\')
+    call matchadd(a:style, l:selection)
+endfunction
+vnoremap <leader>re y:call HighlightSelection('resaltado')<CR>
+vnoremap <leader>re1 y:call HighlightSelection('resaltado1')<CR>
+vnoremap <leader>re2 y:call HighlightSelection('resaltado2')<CR>
+
 
 " Configuracion de coc falta depurar
 " May need for Vim (not Neovim) since coc.nvim calculates byte offset by count
