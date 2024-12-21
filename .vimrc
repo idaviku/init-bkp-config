@@ -139,17 +139,61 @@ highlight SpellBad ctermfg=White ctermbg=red
 highlight SpellCap ctermfg=LightYellow ctermbg=red
 highlight SpellRare ctermfg=LightBlue ctermbg=red
 highlight SpellLocal ctermfg=LightCyan ctermbg=red
-highlight resaltado ctermfg=yellow ctermbg=red guifg=yellow guibg=red
-highlight resaltado1 ctermfg=black ctermbg=cyan guifg=black guibg=cyan
-highlight resaltado2 ctermfg=black ctermbg=green guifg=black guibg=green
+highlight resaltado1 ctermfg=yellow ctermbg=red guifg=yellow guibg=red
+highlight resaltado2 ctermfg=black ctermbg=cyan guifg=black guibg=cyan
+highlight resaltado3 ctermfg=black ctermbg=green guifg=black guibg=green
 
 function! HighlightSelection(style)
-    let l:selection = escape(@", '\')
-    call matchadd(a:style, l:selection)
+  let l:selection = escape(@", '\')
+  let l:id = matchadd(a:style, l:selection)
+  call add(g:highlighted_lines, [a:style . "\t" . l:selection, l:id])
 endfunction
-vnoremap <leader>re y:call HighlightSelection('resaltado')<CR>
+
+function! UnhighlightSelection()
+  let l:selection = escape(@", '\')
+  for idx in range(len(g:highlighted_lines))
+    let parts = split(g:highlighted_lines[idx][0], '\t')
+    if parts[1] == l:selection
+      call matchdelete(g:highlighted_lines[idx][1])
+      call remove(g:highlighted_lines, idx)
+      break
+    endif
+  endfor
+endfunction
+
 vnoremap <leader>re1 y:call HighlightSelection('resaltado1')<CR>
 vnoremap <leader>re2 y:call HighlightSelection('resaltado2')<CR>
+vnoremap <leader>re3 y:call HighlightSelection('resaltado3')<CR>
+
+vnoremap <leader>reu y:call UnhighlightSelection()<CR>
+
+autocmd BufWritePost * call SaveHighlightedLines()
+
+function! SaveHighlightedLines()
+  if !empty(g:highlighted_lines)
+    let l:file = expand('%:p:h') . '/.' . expand('%:t') . '.highlight'
+    let lines = map(copy(g:highlighted_lines), 'v:val[0]')
+    call writefile(lines, l:file)
+  elseif filereadable(expand('%:p:h') . '/.' . expand('%:t') . '.highlight')
+    call delete(expand('%:p:h') . '/.' . expand('%:t') . '.highlight')
+  endif
+endfunction
+
+autocmd BufReadPost * call LoadHighlightedLines()
+
+function! LoadHighlightedLines()
+  let l:file = expand('%:p:h') . '/.' . expand('%:t') . '.highlight'
+  if filereadable(l:file)
+    let lines = readfile(l:file)
+    for line in lines
+      let parts = split(line, '\t')
+      let id = matchadd(parts[0], parts[1])
+      call add(g:highlighted_lines, [line, id])
+    endfor
+  endif
+endfunction
+
+let g:highlighted_lines = []
 
 
 " Configuracion de coc falta depurar
@@ -282,6 +326,8 @@ let wik_work={'path':'~/wiki/work/wik-work','syntax':'default','ext':'md'}
 let g:vimwiki_list=[wik_doc,wik_life,wik_work]
 
 nnoremap <leader>dt i<C-r>=strftime('%d/%m/%Y %A')<CR><Esc>
+nnoremap <leader>dth i<C-r>=strftime('%d/%m/%Y %T %A')<CR><Esc>
+
 nnoremap <leader>vr :vsplit $VIMRC<CR>
 "command! LiveServer silent !live-server %:p:h &
 

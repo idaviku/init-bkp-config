@@ -146,12 +146,56 @@ highlight resaltado1 ctermfg=black ctermbg=cyan guifg=black guibg=cyan
 highlight resaltado2 ctermfg=black ctermbg=green guifg=black guibg=green
 
 function! HighlightSelection(style)
-    let l:selection = escape(@", '\')
-    call matchadd(a:style, l:selection)
+  let l:selection = escape(@", '\')
+  let l:id = matchadd(a:style, l:selection)
+  call add(g:highlighted_lines, [a:style . "\t" . l:selection, l:id])
 endfunction
+
+function! UnhighlightSelection()
+  let l:selection = escape(@", '\')
+  for idx in range(len(g:highlighted_lines))
+    let parts = split(g:highlighted_lines[idx][0], '\t')
+    if parts[1] == l:selection
+      call matchdelete(g:highlighted_lines[idx][1])
+      call remove(g:highlighted_lines, idx)
+      break
+    endif
+  endfor
+endfunction
+
 vnoremap <leader>re y:call HighlightSelection('resaltado')<CR>
 vnoremap <leader>re1 y:call HighlightSelection('resaltado1')<CR>
 vnoremap <leader>re2 y:call HighlightSelection('resaltado2')<CR>
+
+vnoremap <leader>reu y:call UnhighlightSelection()<CR>
+
+autocmd BufWritePost * call SaveHighlightedLines()
+
+function! SaveHighlightedLines()
+  if !empty(g:highlighted_lines)
+    let l:file = expand('%:p:h') . '/.' . expand('%:t') . '.highlight'
+    let lines = map(copy(g:highlighted_lines), 'v:val[0]')
+    call writefile(lines, l:file)
+  elseif filereadable(expand('%:p:h') . '/.' . expand('%:t') . '.highlight')
+    call delete(expand('%:p:h') . '/.' . expand('%:t') . '.highlight')
+  endif
+endfunction
+
+autocmd BufReadPost * call LoadHighlightedLines()
+
+function! LoadHighlightedLines()
+  let l:file = expand('%:p:h') . '/.' . expand('%:t') . '.highlight'
+  if filereadable(l:file)
+    let lines = readfile(l:file)
+    for line in lines
+      let parts = split(line, '\t')
+      let id = matchadd(parts[0], parts[1])
+      call add(g:highlighted_lines, [line, id])
+    endfor
+  endif
+endfunction
+
+let g:highlighted_lines = []
 
 
 " Configuracion de coc falta depurar
@@ -294,15 +338,15 @@ endfunction
 autocmd TextYankPost * call CopyToClipboard()
 
 
-
 " Configuracion De Vimwiki
-let wik_doc={'path':'~/wiki/doc/wik-doc','syntax':'default','ext':'md'}
-let wik_life={'path':'~/wiki/life/wik-life','syntax':'default','ext':'md'}
+let wik_doc={'path':'~/rootx56/wiki/wik-doc','syntax':'default','ext':'md','links_space_char':'_'}
+let wik_life={'path':'~/rootx56/4life','syntax':'default','ext':'md','links_space_char':'_'}
 let wik_work={'path':'~/wiki/work/wik-work','syntax':'default','ext':'md'}
 
 let g:vimwiki_list=[wik_doc,wik_life,wik_work]
 
 nnoremap <leader>dt i<C-r>=strftime('%d/%m/%Y %A')<CR><Esc>
+nnoremap <leader>dth i<C-r>=strftime('%d/%m/%Y %T %A')<CR><Esc>
 nnoremap <leader>vr :vsplit $VIMRC<CR>
 "command! LiveServer silent !live-server %:p:h &
 
