@@ -158,6 +158,7 @@ install_vim_repo(){
       --prefix=/usr/local
   make
   sudo make install
+  rm -rf vim
 }
 install_javac_repo(){
   curl -O "https://download.java.net/java/GA/jdk17.0.2/dfd4a8d0985749f896bed50d7138ee7f/8/GPL/openjdk-17.0.2_linux-x64_bin.tar.gz"
@@ -260,5 +261,7 @@ check_packagev2
 install_with_package
 echo "Paquetes extras:${#extra_programs[@]}"
 install_extra_package
+#install_vim_repo
 install_plugins_zsh
 echo "Configuración e instalación inicial completada."
+
