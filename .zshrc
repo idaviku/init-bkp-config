@@ -7,7 +7,18 @@ export VIMRC=~/.vimrc
 export VISUAL=vim
 export EDITOR=vim
 
+# Declaración de variables de entorno
+export PATH=$PATH:/opt/anaconda3/bin
+export QT_QPA_PLATFORM="xcb"
+#export LIBGL_ALWAYS_SOFTWARE=1
+export QT_XCB_GL_INTEGRATION=none
+#export QT_SCALE_FACTOR=3
+export QT_FONT_DPI=120
+#export QT_AUTO_SCREEN_SCALE_FACTOR=1
+
+
 xset b off
+
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
@@ -86,6 +97,7 @@ plugins=(
 
 source $ZSH/oh-my-zsh.sh
 source $HOME/.local/share/.silntK.bak
+source /opt/anaconda3/etc/profile.d/conda.sh
 
 # User configuration
 
