@@ -261,7 +261,7 @@ check_packagev2
 install_with_package
 echo "Paquetes extras:${#extra_programs[@]}"
 install_extra_package
-#install_vim_repo
+install_vim_repo
 install_plugins_zsh
 echo "Configuración e instalación inicial completada."
 
