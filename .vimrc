@@ -1,144 +1,281 @@
-" Habilitar la sintaxis resaltada
-syntax on 
-" configuracion basica
-set number
-set encoding=utf-8
-set numberwidth=1
-set mouse=a
-set noerrorbells " desactivar pitido 
-set vb t_vb= " desactiva alertas visuales
+" ==========================================================
+" ARCHIVO DE CONFIGURACIÓN VIM (.vimrc) - VERSIÓN OPTIMIZADA
+" ==========================================================
+
+" ----------------------------------------------------------
+" 1. CONFIGURACIÓN BÁSICA Y CORE DEL EDITOR
+" ----------------------------------------------------------
+
+syntax on
 set nocompatible
+filetype plugin indent on
+
+set number
+set relativenumber
+set numberwidth=1
+set encoding=utf-8
+set mouse=a
+set laststatus=2
 set showcmd
-set spelllang=es
 set ruler
 set cursorline
+set splitbelow splitright
+set hidden
+
+" Gestión de rendimiento en renderizado
+set lazyredraw
+set ttyfast
+
+" Búsqueda inteligente e idempotente
 set incsearch
 set ignorecase
+set smartcase
 set showmatch
-set sw=2 " espacios por autoidentacion
-set relativenumber
-set nowrap
-set tabstop=2 " espacio por tab
-set expandtab " cambia la sangria por espacios > <
-set autoindent
-set laststatus=2 " linea de estado activa (2=always)
-set bg=dark
-set colorcolumn=120
-set autoread " lee automaticamente el archivo si es modificado desde otra fuente
 set hlsearch
-set hidden
 set nohlsearch
-let &t_ut=''  " To render properly background of the color scheme
-set splitbelow splitright   " Set the splits to open at the right side and below 
-set lazyredraw " no renderiza cuando la opcion se ejecuto antes 
-set ttyfast " mejora la suavidad cuando hay multiples ventanas
-set nrformats+=alpha  " sets foreground color (ANSI, true-color mode)
+
+" Tabuladores, Sangrías y Ajustes de Línea
+set sw=2
+set tabstop=2
+set expandtab
+set autoindent
+set nowrap
+set linebreak
+set showbreak=->
+set breakindent
+set colorcolumn=120
+
+" Alertas de Sistema e Integridad de Archivos
+set noerrorbells
+set vb t_vb=
+set autoread
 set backspace=indent,eol,start
+set spelllang=es
+"set guifont=CaskaydiaCove\ Nerd\ Font:h14
+
+" Configuración estricta de seguridad para CoC (Evitar corrupción)
+set nobackup
+set nowritebackup
+set updatetime=300
+set signcolumn=yes
+
+" Permitir caracteres alfabéticos en formatos de numeración incremento/decremento
+set nrformats+=alpha
+
+" Ajustes True-Color (Termguicolors) preventivos para Tmux / Zsh
+let &t_ut=''
 let &t_8f = "\e[38;2;%lu;%lu;%lum"
-" sets background color (ANSI, true-color mode)
 let &t_8b = "\e[48;2;%lu;%lu;%lum"
 set termguicolors
+set bg=dark
 colorscheme retrobox
-set linebreak  "evita que las palabras se corten por wrap 
-set showbreak=-> "caracter visual para indicar que la linea se corto
-set breakindent "indentacion en lineas cortadas
-filetype plugin on 
 
-" CONF - CONFIGURACION DE COMPLEMENTOS PLUGINS
+" ----------------------------------------------------------
+" 2. GESTIÓN DE COMPLEMENTOS (VIM-PLUG)
+" ----------------------------------------------------------
 call plug#begin('~/.vim/plugged')
 
-" Temas
-"Plug 'morhetz/gruvbox'
+" Interfaz y Temas
 Plug 'maximbaz/lightline-ale'
 Plug 'itchyny/lightline.vim'
 
- 
-" IDE
+" Productividad, Navegación e IDE
 Plug 'easymotion/vim-easymotion'
 Plug 'scrooloose/nerdtree'
 Plug 'christoomey/vim-tmux-navigator'
-Plug 'junegunn/fzf'
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 Plug 'mhinz/vim-signify', {'tag':'legacy'}
 Plug 'yggdroot/indentline'
-Plug 'mattn/emmet-vim' " <c-y>,
-Plug 'scrooloose/nerdcommenter' " <leader>c<space>
-Plug 'vimwiki/vimwiki' " :VimWikiUISelect
+Plug 'mattn/emmet-vim'
+Plug 'scrooloose/nerdcommenter'
+Plug 'vimwiki/vimwiki'
 Plug 'rhysd/vim-healthcheck'
 
-" Typing
+" Utilidades de Escritura y Edición
 Plug 'jiangmiao/auto-pairs'
 Plug 'alvan/vim-closetag'
 Plug 'lilydjwg/colorizer'
-
-" Autocomplete
-Plug 'SirVer/ultisnips' " :UltiSnipsEdit
-Plug 'honza/vim-snippets'
-"Plug 'thomasfaingnaert/vim-lsp-snippets'
-"Plug 'thomasfaingnaert/vim-lsp-ultisnips'
-"Plug 'prabirshrestha/async.vim'
-Plug 'neoclide/coc.nvim', {'branch':'release'} 
 Plug 'tpope/vim-repeat'
-Plug 'tpope/vim-surround' " cs<caracter> ds<char> ysiw<char> , mode(v) S
-Plug 'dhruvasagar/vim-table-mode' " <leader>tm
-"Plug 'prabirshrestha/ vim-lsp'
-"Plug 'mattn/vim-lsp-settings'
-"Plug 'prabirshrestha/asyncomplete.vim'
-"Plug 'prabirshrestha/asyncomplete-lsp.vim'
+Plug 'tpope/vim-surround'
+Plug 'dhruvasagar/vim-table-mode'
+
+" Motores de Autocompletado y Snippets (Entorno de Desarrollo)
+Plug 'SirVer/ultisnips'
+Plug 'honza/vim-snippets'
+Plug 'neoclide/coc.nvim', {'branch':'release'}
+
+" Gestión de Base de Datos Integrada (Investigación/Desarrollo)
 Plug 'tpope/vim-dadbod'
-Plug 'kristijanhusak/vim-dadbod-ui' " :DBUI
-Plug 'kristijanhusak/vim-dadbod-completion' 
+Plug 'kristijanhusak/vim-dadbod-ui'
+Plug 'kristijanhusak/vim-dadbod-completion'
 
 call plug#end()
 
-" Configuracion de tema gruvbox
-"colorscheme gruvbox
-"let g:gruvbox_contrast_dark = "hard"
-
+" Parámetros de Plugins individuales
 let NERDTreeQuitOnOpen=1
+let g:user_emmet_install_global = 0
+let g:table_mode_corner_corner='+'
+autocmd FileType html,css EmmetInstall
+autocmd FileType markdown,json setl conceallevel=2
+" Forzar a CoC a usar el binario ejecutable directo de NVM (Evita conflictos de Lazy Load)
+let g:coc_node_path = '~/.nvm/versions/node/v22.5.1/bin/node'
 
-
-" CONF - MAPEO DE ATAJOS 
+" ----------------------------------------------------------
+" 3. MAPEO DE ATAJOS DE TECLADO & LIDER
+" ----------------------------------------------------------
 let mapleader=" "
+
+" Deshabilitar Flechas de Dirección (Obligar uso de teclas de movimiento estándar HJKL)
 noremap <Up> <nop>
 noremap <Down> <nop>
 noremap <Left> <nop>
 noremap <Right> <nop>
+nnoremap <C-a> <nop>
 
-" Busqueda de cadena con fzf
+" Atajos de Navegación Rápida y FZF
 map <Leader>p :Files<CR>
 map <Leader>ag :Ag<CR>
 nmap <Leader>nt :NERDTreeFind<CR>
-
-" Entrar A Modo Visual Block 
 nnoremap <Leader><Leader>v <C-V>
 
-" Navegacion De Ventanas Tmux
+" Navegación Asíncrona nativa de Ventanas Tmux
 let g:tmux_navigator_no_mappings = 1
 nnoremap <silent> <Leader><C-h> :<C-U>TmuxNavigateLeft<CR>
 nnoremap <silent> <Leader><C-j> :<C-U>TmuxNavigateDown<CR>
 nnoremap <silent> <Leader><C-k> :<C-U>TmuxNavigateUp<CR>
 nnoremap <silent> <Leader><C-l> :<C-U>TmuxNavigateRight<CR>
 
-" Movimiento Rapido Scroll
-nmap <Leader>s <Plug>(easymotion-s2)
+" Movimientos Easymotion y Desplazamiento Veloz
+let g:EasyMotion_use_upper = 1
+let g:EasyMotion_smartcase = 1
+  nmap <Leader>s <Plug>(easymotion-s2)
 nnoremap <silent> <C-j> 10<C-e><CR>
 nnoremap <silent> <C-k> 10<C-y><CR>
 
-" Use uppercase target labels and type as a lower case
-let g:EasyMotion_use_upper = 1
- " type `l` and match `l`&`L`
-let g:EasyMotion_smartcase = 1
-
-" Modificar Texto Marcado Primara Letra En Mayuscula 
+" Utilidades de Edición Rápidas
 vnoremap <leader>uu :s/\v<\w/\U&/g<CR>
-
-" Corrector Ortografico Y Forzar Resaltado De Color
+nnoremap <leader>kp :let @"=expand("%:p")<CR>
+nnoremap <leader>vr :vsplit $VIMRC<CR>
 nnoremap <leader><leader>sp :setlocal spell!<CR>
+
+" Estampado de Fechas
+nnoremap <leader>dt i<C-r>=strftime('%d/%m/%Y %A')<CR><Esc>
+nnoremap <leader>dth i<C-r>=strftime('%d/%m/%Y %T %A')<CR><Esc>
+
+" Comandos de Servidores Web de Desarrollo
+command! BrowserSync silent !browser-sync start --server %:p:h --files %:p:h --browser "google-chrome-stable"&
+
+" ----------------------------------------------------------
+" 4. INTEGRACIÓN ASÍNCRONA DE RESPALDOS (BKP4DUMMIES) 
+" ----------------------------------------------------------
+augroup AutobkpDummies
+  autocmd!
+  if has('job') && !has('nvim')
+    autocmd BufWritePre ~/.vimrc,~/.zshrc,~/.tmux.conf call RunBkpAsync(expand('<afile>:p'))
+  elseif has('nvim')
+    autocmd BufWritePre ~/.vimrc,~/.zshrc,~/.tmux.conf call jobstart(['/home/davik/rootx56/config/init-bkp-config/scripts/bkp4dummies.sh', expand('<afile>:p')])
+  else
+    autocmd BufWritePre ~/.vimrc,~/.zshrc,~/.tmux.conf silent! :!/home/davik/rootx56/config/init-bkp-config/scripts/bkp4dummies.sh %
+  endif
+augroup END
+
+function! RunBkpAsync(filepath)
+  let l:cmd = ['/home/davik/rootx56/config/init-bkp-config/scripts/bkp4dummies.sh', a:filepath]
+  call job_start(l:cmd, {"stoponexit": ""})
+endfunction
+
+" ----------------------------------------------------------
+" 5. CONFIGURACIÓN ASÍNCRONA DE COALESCENCIA (COC.NVM) & COMPLETADO
+" ----------------------------------------------------------
+inoremap <silent><expr> <TAB>
+      \ coc#pum#visible() ? coc#pum#next(1) :
+      \ CheckBackspace() ? "\<Tab>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
+
+inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
+                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+
+function! CheckBackspace() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
+inoremap <silent><expr> <c-@> coc#refresh()
+
+" Desplazamiento en Ventanas Flotantes de CoC
+if has('nvim-0.4.0') || has('patch-8.2.0750')
+  nnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
+  nnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
+  inoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<Right>"
+  inoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<Left>"
+  vnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
+  vnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
+endif
+
+" Atajos de Navegación de Código (LSP)
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+nmap <leader>cl <Plug>(coc-codelens-action)
+nnoremap <silent> K :call ShowDocumentation()<CR>
+
+function! ShowDocumentation()
+  if CocAction('hasProvider', 'hover')
+    call CocActionAsync('doHover')
+  else
+    call feedkeys('K', 'in')
+  endif
+endfunction
+
+" RESOLUCIÓN DE CONFLICTO COCVSP vs ULTISNIPS: Mapeo alternativo para Snippets
+let g:UltiSnipsExpandTrigger="<c-space>"
+let g:UltiSnipsJumpForwardTrigger="<c-b>"
+let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+
+" ----------------------------------------------------------
+" 6. PORTAPAPELES COMPARTIDO INTER-PLATAFORMAS (WSL / LOCAL)
+" ----------------------------------------------------------
+if has('clipboard') && has('unnamedplus')
+  set clipboard=unnamedplus
+endif
+
+if system('uname -r') =~? "microsoft"
+  augroup WSLClipboard
+    autocmd!
+    autocmd TextYankPost * :call system('clip.exe', @")
+  augroup END
+endif
+
+" ----------------------------------------------------------
+" 7. FUNCIONES EXTENDIDAS DE USUARIO (AUTOMATIZACIONES DE TEXTO)
+" ----------------------------------------------------------
+
+" --- Ejecutor de Archivos en Caliente de Forma Segura ---
+function! RunFile()
+  let l:filetype = expand('%:e')
+  execute 'w'
+  if l:filetype == 'py'
+    execute '!python3 ' . shellescape(expand('%:p'))
+  elseif l:filetype == 'js'
+    execute '!node ' . shellescape(expand('%:p'))
+  elseif l:filetype == 'cpp'
+    execute '!g++ ' . shellescape(expand('%:p')) . ' -o ' . shellescape(expand('%:p:r')) . ' && ' . shellescape(expand('%:p:r'))
+  elseif l:filetype == 'sh'
+    execute '!bash ' . shellescape(expand('%:p'))
+  else
+    echo "No hay soporte nativo de ejecución rápida para extensiones ." . l:filetype
+  endif
+endfunction
+nnoremap <F5> :call RunFile()<CR>
+
+" --- Formateador y Resaltador de Duplicados e Hitos Visuales ---
+let g:highlighted_lines = []
+
 highlight SpellBad ctermfg=White ctermbg=red
 highlight SpellCap ctermfg=LightYellow ctermbg=red
-highlight SpellRare ctermfg=LightBlue ctermbg=red
-highlight SpellLocal ctermfg=LightCyan ctermbg=red
 highlight resaltado1 ctermfg=yellow ctermbg=red guifg=yellow guibg=red
 highlight resaltado2 ctermfg=black ctermbg=cyan guifg=black guibg=cyan
 highlight resaltado3 ctermfg=black ctermbg=green guifg=black guibg=green
@@ -164,10 +301,13 @@ endfunction
 vnoremap <leader>re1 y:call HighlightSelection('resaltado1')<CR>
 vnoremap <leader>re2 y:call HighlightSelection('resaltado2')<CR>
 vnoremap <leader>re3 y:call HighlightSelection('resaltado3')<CR>
-
 vnoremap <leader>reu y:call UnhighlightSelection()<CR>
 
-autocmd BufWritePost * call SaveHighlightedLines()
+augroup HighlightPersistence
+  autocmd!
+  autocmd BufWritePost * call SaveHighlightedLines()
+  autocmd BufReadPost * call LoadHighlightedLines()
+augroup END
 
 function! SaveHighlightedLines()
   if !empty(g:highlighted_lines)
@@ -178,8 +318,6 @@ function! SaveHighlightedLines()
     call delete(expand('%:p:h') . '/.' . expand('%:t') . '.highlight')
   endif
 endfunction
-
-autocmd BufReadPost * call LoadHighlightedLines()
 
 function! LoadHighlightedLines()
   let l:file = expand('%:p:h') . '/.' . expand('%:t') . '.highlight'
@@ -193,189 +331,19 @@ function! LoadHighlightedLines()
   endif
 endfunction
 
-let g:highlighted_lines = []
-
-
-" Configuracion de coc falta depurar
-" May need for Vim (not Neovim) since coc.nvim calculates byte offset by count
-" Some servers have issues with backup files, see #649
-set nobackup
-set nowritebackup
-
-" Having longer updatetime (default is 4000 ms = 4s) leads to noticeable
-" delays and poor user experience
-set updatetime=300
-
-" Always show the signcolumn, otherwise it would shift the text each time
-" diagnostics appear/become resolved
-set signcolumn=yes
-
-" Use tab for trigger completion with characters ahead and navigate
-" NOTE: There's always complete item selected by default, you may want to enable
-" no select by `"suggest.noselect": true` in your configuration file
-" NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
-" other plugin before putting this into your config
- inoremap <silent><expr> <TAB>
-       \ coc#pum#visible() ? coc#pum#next(1) :
-       \ CheckBackspace() ? "\<Tab>" :
-       \ coc#refresh()
- inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
- 
- " Make <CR> to accept selected completion item or notify coc.nvim to format
- " <C-g>u breaks current undo, please make your own choice
- inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
-                               \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
- 
-function! CheckBackspace() abort
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~# '\s'
-endfunction
-
-" Use <c-space> to trigger completion
-inoremap <silent><expr> <c-@> coc#refresh()
- 
- " Remap <C-f> and <C-b> to scroll float windows/popups
- if has('nvim-0.4.0') || has('patch-8.2.0750')
-   nnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
-   nnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
-   inoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<Right>"
-   inoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<Left>"
-   vnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
-   vnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
- endif
- 
- " GoTo code navigation
- nmap <silent> gd <Plug>(coc-definition)
- nmap <silent> gy <Plug>(coc-type-definition)
- nmap <silent> gi <Plug>(coc-implementation)
- nmap <silent> gr <Plug>(coc-references)
-
-" Use K to show documentation in preview window
-nnoremap <silent> K :call ShowDocumentation()<CR>
-
-function! ShowDocumentation()
-  if CocAction('hasProvider', 'hover')
-    call CocActionAsync('doHover')
-  else
-    call feedkeys('K', 'in')
-  endif
-endfunction
-
-" Run the Code Lens action on the current line
-nmap <leader>cl  <Plug>(coc-codelens-action)
-
-" configuracion de vim-table-mode
-function! s:isAtStartOfLine(mapping)
-  let text_before_cursor = getline('.')[0 : col('.')-1]
-  let mapping_pattern = '\V' . escape(a:mapping, '\') let comment_pattern = '\V' . escape(substitute(&l:commentstring, '%s.*$', '', ''), '\') return (text_before_cursor =~? '^' . ('\v(' . comment_pattern . '\v)?') . '\s*\v' . mapping_pattern . '\v$') 
-endfunction
-inoreabbrev <expr> <bar><bar>
-          \ <SID>isAtStartOfLine('\|\|') ?
-          \ '<c-o>:TableModeEnable<cr><bar><space><bar><left><left>' : '<bar><bar>'
-inoreabbrev <expr> __
-          \ <SID>isAtStartOfLine('__') ?
-          \ '<c-o>:silent! TableModeDisable<cr>' : '__'
-
-let g:table_mode_corner_corner='+'
-
-let g:user_emmet_install_global = 0
-autocmd FileType html,css EmmetInstall
- 
-autocmd FileType markdown,json setl conceallevel=2
-nnoremap <Leader>kp :let @"=expand("%:p")<CR>
-
-augroup AutobkpDummies
-  autocmd!
-  autocmd BufWritePre ~/.vimrc,~/.zshrc,~/.tmux.conf :!~/rootx56/config/init-bkp-config/scripts/bkp4dummies.sh %
-augroup END
-
-
-" Configuración Del Copiado y pegado Entre Plataformas Wsl
-if has('clipboard') && has('unnamedplus')
-    " Habilitar el soporte del portapapeles y usar el registro "+ para copiar " y pegar
-  set clipboard=unnamedplus
-endif
-
-"if system('uname -r') =~ "microsoft"
-"    " Configurar autocmds para copiar y pegar texto entre Vim en WSL y
-"    " Windows
-"  augroup WSLClipboard
-"  autocmd!
-"  autocmd TextYankPost * if v:event.operator is# 'y' | call system('/mnt/c/Windows/System32/clip.exe', @0) | endif 
-"  autocmd VimLeave * call system('cat /dev/null > /dev/clipboard')
-"  augroup END
-"endif
-
-"Configuracion UltiSnips
-let g:UltiSnipsExpandTrigger="<tab>"
-let g:UltiSnipsJumpForwardTrigger="<c-b>"
-let g:UltiSnipsJumpBackwardTrigger="<c-z>"
-
-if system('uname -r') =~ "microsoft"
-	augroup Yank
-  autocmd!
-  autocmd TextYankPost * :call system('clip.exe',@")
-  augroup END
-endif
-
-" Configuracion De Vimwiki
-let wik_doc={'path':'~/rootx56/wiki/wik-doc','syntax':'default','ext':'md','links_space_char':'_'}
-let wik_life={'path':'~/rootx56/4life','syntax':'default','ext':'md','links_space_char':'_'}
-let wik_work={'path':'~/wiki/work/wik-work','syntax':'default','ext':'md'}
-
-let g:vimwiki_list=[wik_doc,wik_life,wik_work]
-
-nnoremap <leader>dt i<C-r>=strftime('%d/%m/%Y %A')<CR><Esc>
-nnoremap <leader>dth i<C-r>=strftime('%d/%m/%Y %T %A')<CR><Esc>
-
-nnoremap <leader>vr :vsplit $VIMRC<CR>
-"command! LiveServer silent !live-server %:p:h &
-
-command! BrowserSync silent !browser-sync start --server %:p:h --files %:p:h --browser "google-chrome-stable"&
-
-function! RunFile()
-  let l:filetype = expand('%:e')  " Obtener la extensión del archivo
-  execute 'w'  " Guardar el archivo
-  if l:filetype == 'py'
-    execute '!python3 %'
-  elseif l:filetype == 'js'
-    execute '!node %'
-  elseif l:filetype == 'cpp'
-    execute '!g++ % -o %< && ./%<'
-  elseif l:filetype == 'sh'
-    execute '!bash %'
-  else
-    echo "No hay soporte para este tipo de archivo."
-  endif
-endfunction
-
-nnoremap <F5> :call RunFile()<CR>
-
+" --- Procesador de Líneas Duplicadas y Fragmentación ---
 function! FragmentLines(max_length)
   let l:current_line = getline('.')
-  let l:line_length = len(l:current_line)
-
-  if l:line_length <= a:max_length
-    return
-  endif
-
+  if len(l:current_line) <= a:max_length | return | endif
   let l:fragments = []
   let l:words = split(l:current_line, '\s\+')
   let l:fragment = ''
-
   for l:word in l:words
     if len(l:fragment) + len(l:word) + 1 <= a:max_length
-      if l:fragment == ''
-        let l:fragment = l:word
-      else
-        let l:fragment .= ' ' . l:word
-      endif
+      let l:fragment = (l:fragment == '') ? l:word : l:fragment . ' ' . l:word
     else
-      " Si la palabra es más larga que max_length, agrega la palabra como una nueva línea
       if len(l:word) > a:max_length
-        if l:fragment != ''
-          call add(l:fragments, l:fragment)
-        endif
+        if l:fragment != '' | call add(l:fragments, l:fragment) | endif
         call add(l:fragments, l:word)
         let l:fragment = ''
       else
@@ -384,14 +352,9 @@ function! FragmentLines(max_length)
       endif
     endif
   endfor
-
-  if l:fragment != ''
-    call add(l:fragments, l:fragment)
-  endif
-
+  if l:fragment != '' | call add(l:fragments, l:fragment) | endif
   call setline('.', l:fragments)
 endfunction
-
 nnoremap <leader>f :call FragmentLines(60)<CR>
 
 function! HighlightDuplicates()
@@ -400,16 +363,13 @@ function! HighlightDuplicates()
   for l:line in l:lines
     let l:counts[l:line] = get(l:counts, l:line, 0) + 1
   endfor
-
   for [l:line, l:count] in items(l:counts)
-    if l:count > 1
-      " Resaltar la línea
-      execute 'syntax match Duplicates "' . l:line . '"'
+    if l:count > 1 && !empty(l:line)
+      execute 'syntax match Duplicates "' . escape(l:line, '"\^$*[]') . '"'
     endif
-  endfor
+  done
   highlight Duplicates ctermfg=darkred ctermbg=white cterm=bold
 endfunction
-
 nnoremap <leader>rp :call HighlightDuplicates()<CR>
 
 function! RemoveDuplicates()
@@ -422,53 +382,27 @@ function! RemoveDuplicates()
       let l:seen[l:line] = 1
     endif
   endfor
-
-  "let l:delete_all = input("¿Borrar todos los duplicados? (s/n): ")
-
-  "if l:delete_all == 's'
-    call setline(1, l:unique_lines)
-    let l:remaining_lines = len(l:unique_lines)
-    execute (l:remaining_lines + 1) . ",$d"
-  "else
-    "" Preguntar sobre cada línea duplicada
-    "for l:line in keys(l:seen)
-      "if l:seen[l:line] > 1
-        "let l:confirm = input("¿Borrar todas las instancias de la línea duplicada: '" . l:line . "'? (s/n): ")
-        "if l:confirm == 's'
-          "" Borrar todas las instancias menos la primera
-          "execute 'g/' . escape(l:line, '/') . '/d'
-          "let l:seen[l:line] = 1  " Marcar como ya añadida
-        "endif
-      "endif
-    "endfor
-
-    "" Actualizar la lista de líneas a mantener
-    "let l:lines_to_keep = []
-    "for l:line in l:unique_lines
-      "if has_key(l:seen, l:line)
-        "call add(l:lines_to_keep, l:line)
-      "endif
-    "endfor
-
-    "" Actualizar las líneas en el buffer
-    "call setline(1, l:lines_to_keep)
-    "let l:remaining_lines = len(l:lines_to_keep)
-    "execute (l:remaining_lines + 1) . ",$d"  " Eliminar líneas restantes
-  "endif 
-
+  call setline(1, l:unique_lines)
+  execute (len(l:unique_lines) + 1) . ",$d"
   redraw!
 endfunction
-
 nnoremap <leader>rpd :call RemoveDuplicates()<CR>
 
 function! SortArray()
-  " Itera sobre cada línea en el rango actual
   for l:line in getline("'<", "'>")
-    " Divide la línea en palabras, las ordena y las une
     let l:sorted_line = join(sort(split(l:line, '\s\+')), ' ')
-    " Sustituye la línea original con la línea ordenada
     call setline('.', l:sorted_line)
   endfor
 endfunction
-
 vnoremap <leader>sa :call SortArray()<CR>
+
+" --- Habilitación Estricta de Tablas Inteligentes ---
+function! s:isAtStartOfLine(mapping)
+  let text_before_cursor = getline('.')[0 : col('.')-1]
+  let mapping_pattern = '\V' . escape(a:mapping, '\')
+  let comment_pattern = '\V' . escape(substitute(&l:commentstring, '%s.*$', '', ''), '\')
+  return (text_before_cursor =~? '^' . ('\v(' . comment_pattern . '\v)?') . '\s*\v' . mapping_pattern . '\v$')
+endfunction
+
+inoreabbrev <expr> <bar><bar> <SID>isAtStartOfLine('\|\|') ? '<c-o>:TableModeEnable<cr><bar><space><bar><left><left>' : '<bar><bar>'
+inoreabbrev <expr> __ <SID>isAtStartOfLine('__') ? '<c-o>:silent! TableModeDisable<cr>' : '__'
