@@ -226,9 +226,9 @@ mountUsb() {
       ;;
 
     "Montar_Particion")
-      # Lista solo las particiones (ej: sda1, sdb1) que NO estén montadas todavía
+      # Filtra particiones cuyo punto de montaje esté vacío (última columna vacía)
       local particion
-      particion=$(lsblk -plo NAME,SIZE,TYPE,MOUNTPOINT | grep "part" | grep -v "/" | fzf --height=40% --layout=reverse --header="Selecciona la partición a MONTAR:")
+      particion=$(lsblk -rnpo NAME,SIZE,TYPE,MOUNTPOINTS | awk '$3=="part" && $4==""' | fzf --height=40% --layout=reverse --header="Selecciona la partición a MONTAR:")
 
       if [ -n "$particion" ]; then
         local dev_part=$(echo "$particion" | awk '{print $1}')
@@ -237,9 +237,9 @@ mountUsb() {
       ;;
 
     "Desmontar_Particion")
-      # Lista solo las particiones que SÍ están montadas actualmente bajo /run/media o /mnt
+      # Filtra particiones que SÍ tienen un punto de montaje asignado
       local particion_montada
-      particion_montada=$(lsblk -plo NAME,SIZE,TYPE,MOUNTPOINT | grep "part" | grep -E "/run/media|/mnt" | fzf --height=40% --layout=reverse --header="Selecciona la partición a DESMONTAR:")
+      particion_montada=$(lsblk -rnpo NAME,SIZE,TYPE,MOUNTPOINTS | awk '$3=="part" && $4!=""' | fzf --height=40% --layout=reverse --header="Selecciona la partición a DESMONTAR:")
 
       if [ -n "$particion_montada" ]; then
         local dev_part_m=$(echo "$particion_montada" | awk '{print $1}')
@@ -248,9 +248,9 @@ mountUsb() {
       ;;
 
     "Apagar_Dispositivo(Power-off)")
-      # Lista los discos completos (ej: sda, sdb), excluyendo el disco principal nvme
+      # Lista los discos completos, excluyendo nvme y zram
       local disco
-      disco=$(lsblk -plo NAME,SIZE,TYPE | grep "disk" | grep -v "nvme" | fzf --height=40% --layout=reverse --header="Selecciona el disco físico a APAGAR de forma segura:")
+      disco=$(lsblk -rnpo NAME,SIZE,TYPE | awk '$3=="disk"' | grep -vE "nvme|zram" | fzf --height=40% --layout=reverse --header="Selecciona el disco físico a APAGAR de forma segura:")
 
       if [ -n "$disco" ]; then
         local dev_disco=$(echo "$disco" | awk '{print $1}')
@@ -263,6 +263,9 @@ mountUsb() {
       ;;
   esac
 }
+
+
+
 
 yt-play() {
   echo -n "🔍 ¿Qué quieres escuchar? (Canción, artista o álbum): "
@@ -282,7 +285,7 @@ yt-play() {
 
   echo -e "\n🔎 Buscando en YouTube..."
 
-  # Buscamos con yt-dlp y fzf
+  # Buscamos con yt-dlp y fzf --cookies-from-browser firefox  
   local elegido=$(yt-dlp "ytsearch20:$busqueda" --flat-playlist --dump-json 2>/dev/null | \
     jq -r 'select(.id != null) | "\(.title) | https://www.youtube.com/watch?v=\(.id)"' | \
     fzf --prompt="🎵 Selecciona una canción: " --height=40% --layout=reverse)
@@ -313,11 +316,11 @@ yt-play() {
     3)
       # MODO VIDEO (Límite suave de 1080p sin romper búsquedas)
       # --ytdl-raw-options="extractor-args=youtube:player_client=web" \
-      #--ytdl-format="bestvideo[height<=?720]+bestaudio/best" \
-      # --ytdl-format="bestvideo[height<=1080]+bestaudio/best" \
+      #--ytdl-format="besandroidideo[height<=?720]+bestaudio/best" \
+      # --ytdl-format="besandroidideo[height<=1080]+bestaudio/best" \
       echo -e "\n🎬 Reproduciendo Video: $titulo\n"
       mpv --term-status-msg="$term_msg" \
-          --ytdl-format="bestvideo[height<=1080][ext=mp4]+bestaudio[ext=m4a]/bestvideo[height<=1080]+bestaudio/best" \
+          --ytdl-format="besandroidideo[height<=1080][ext=mp4]+bestaudio[ext=m4a]/besandroidideo[height<=1080]+bestaudio/best" \
           "$url"
       ;;
 

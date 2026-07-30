@@ -87,7 +87,7 @@ Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 Plug 'mhinz/vim-signify', {'tag':'legacy'}
 Plug 'yggdroot/indentline'
-Plug 'mattn/emmet-vim'
+Plug 'mattn/emmet-vim' " <c-y>,
 Plug 'scrooloose/nerdcommenter'
 Plug 'vimwiki/vimwiki'
 Plug 'rhysd/vim-healthcheck'
@@ -97,8 +97,8 @@ Plug 'jiangmiao/auto-pairs'
 Plug 'alvan/vim-closetag'
 Plug 'lilydjwg/colorizer'
 Plug 'tpope/vim-repeat'
-Plug 'tpope/vim-surround'
-Plug 'dhruvasagar/vim-table-mode'
+Plug 'tpope/vim-surround' " cs<caracter> ds<char> ysiw<char> , mode(v) S
+Plug 'dhruvasagar/vim-table-mode' " <leader>tm
 
 " Motores de Autocompletado y Snippets (Entorno de Desarrollo)
 Plug 'SirVer/ultisnips'
@@ -106,7 +106,7 @@ Plug 'honza/vim-snippets'
 Plug 'neoclide/coc.nvim', {'branch':'release'}
 
 " Gestión de Base de Datos Integrada (Investigación/Desarrollo)
-Plug 'tpope/vim-dadbod'
+Plug 'tpope/vim-dadbod' " :DBUI
 Plug 'kristijanhusak/vim-dadbod-ui'
 Plug 'kristijanhusak/vim-dadbod-completion'
 
