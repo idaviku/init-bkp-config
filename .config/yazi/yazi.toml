@@ -1,0 +1,19 @@
+[manager]
+preview_image = true
+image_protocol = "sixel"
+image_layer = "sixel"
+
+[opener]
+
+[preview]
+image_filter = "triangle"
+image_quality = 75
+sixel_fraction = 15
+
+[plugin]
+
+[tasks]
+
+[flavor]
+
+[log]

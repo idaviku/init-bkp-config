@@ -1,0 +1,18 @@
+# CASO 1: Solo la laptop (Fuera de casa)
+profile {
+    output eDP-1 enable mode 1920x1080@60Hz position 0,0
+}
+
+# CASO 2: En casa (Monitor externo conectado + Tapa cerrada)
+profile {
+    output eDP-1 disable
+    output HDMI-A-1 enable mode 1600x900@60Hz position 0,0
+}
+
+# CASO 3: Dual-Screen (Tapa abierta + Monitor Externo al lado)
+# En lugar de clonar (que deforma la resolución de 1600x900), los ponemos uno al lado del otro.
+# La laptop a la izquierda (0,0) y el monitor a la derecha (1920,0)
+profile {
+    output eDP-1 enable mode 1920x1080@60Hz position 0,0
+    output HDMI-A-1 enable mode 1600x900@60Hz position 1920,0
+}

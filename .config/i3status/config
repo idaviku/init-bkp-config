@@ -1,0 +1,86 @@
+## Configuración amigable de i3status para Artix Linux
+
+general {
+        colors = true
+        interval = 5
+        # Colores globales para estados de alerta o peligro
+        color_good = "#a6e3a1"      # Verde suave para estados óptimos
+        color_degraded = "#f9e2af"  # Amarillo para advertencias
+        color_bad = "#f38ba8"       # Rojo pastel para alertas críticas
+}
+
+# Aquí defines qué módulos se muestran y en qué orden (de izquierda a derecha)
+order += "wireless _first_"
+order += "volume master"
+order += "battery all"
+order += "read_file temp"
+#order += "cpu_temperature 0"
+order += "cpu_usage"
+order += "memory"
+order += "tztime local"
+
+# Configuración específica de cada módulo:
+
+wireless _first_ {
+        format_up = " %essid(%quality)"
+        format_down = "  down"
+}
+
+#battery all {
+        #format = "%status %percentage %remaining"
+        #format_down = "No battery"
+        #status_chr = "⚡ CHR"
+        #status_bat = "󰁹 BAT"
+        #status_unk = "? UNK"
+        #status_full = "☻ FULL"
+        #path = "/sys/class/power_supply/BAT%d/uevent"
+        #low_threshold = 15
+        #threshold_type = percentage
+#}
+
+volume master {
+        format = "󰕾 %volume"
+        format_muted = "󰝟 Muted (%volume)"
+        device = "default"
+        mixer = "Master"
+        mixer_idx = 0
+}
+
+battery all {
+        format = "%status %percentage %remaining"
+        format_down = "󰂎 No bat"
+        status_chr = "󱐋 CHR"
+        status_bat = "󰁹 BAT"
+        status_unk = "󰂑 UNK"
+        status_full = "󰁹 FULL"
+        path = "/sys/class/power_supply/BAT%d/uevent"
+        low_threshold = 25
+        threshold_type = percentage
+        last_full_capacity = true
+}
+
+read_file temp {
+        path = "/sys/class/hwmon/hwmon5/temp1_input"
+        format = " %content °C"
+        format_bad = " N/A"
+}
+
+cpu_temperature 0 {
+        path = "/sys/class/hwmon/hwmon5/temp1_input"
+        format = " %temperature °C"
+        max_threshold = 75
+}
+
+cpu_usage {
+        format = " %usage"
+}
+
+memory {
+        format = "󰾆 %used/%total"
+        threshold_degraded = "1G"
+        format_degraded = "MEMORY < %available"
+}
+
+tztime local {
+        format = " %H:%M   %Y-%m-%d"
+} 
